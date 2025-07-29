@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="dcterms.title" content="WindowsにOracle XEをインストールする">
+  <meta name="dcterms.date" content="2019-07-22">
+  <meta name="dcterms.modified" content="2025-07-28">
+  <meta name="description" content="Windows に Oracle XE をインストールする手順を掲載する。">
+  <title>WindowsにOracle XEをインストールする - 怠日記</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+    nav[aria-label="breadcrumb"] { font-size: .875rem; }
+    div.sourceCode { padding: 1em; border: 1px solid lightgray; }
+    div.sourceCode { margin: 1.5rem 0; }
+  </style>
+  <style>
+    /* TODO: 外部ファイルにする */
+    * {
+      box-sizing: border-box;
+    }
+
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    main {
+      display: block;
+    }
+
+    html {
+      font-size: 100%;
+    }
+
+    body {
+      margin: 0;
+      line-height: 1.5;
+      font-weight: 400;
+      font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      color: rgba(0, 0, 0, .9);
+
+      /*折り返しの設定*/
+      /*禁則処理を無視しなければ1行からはみ出てしまうときだけ禁則処理を無視する*/
+      /*word-wrap も overflow-wrap も効果は同じ。名前が違うだけ*/
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /*html, body {
+      height: 100%;
+    }*/
+
+    /*RootContainer*/
+    body > div {
+      /*height: 100%;*/
+      /*padding-left: .5rem;*/
+      /*padding-right: .5rem;*/
+      /*display: flex;*/
+      /*flex-direction: column;*/
+      /*overflow: hidden;*/
+    }
+    /*FullHeightContainer*/
+    body > div > div {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    /* GlobalHeader */
+    body > div > div > header {
+    }
+
+    body > div > div > header > div,
+    body > div > div > main > div,
+    body > div > div > footer > div {
+      padding-left: .5rem;
+      padding-right: .5rem;
+    }
+
+    /* SiteName */
+    body > div > div > header > div > div {
+      font-size: 1.5rem;
+      line-height: 2;
+      text-align: center;
+    }
+    /* Body */
+    body > div > div > main {
+      flex: 1 0 auto;
+      margin-top: 2rem;
+      margin-left: auto;
+      margin-right: auto;
+      /* フレックスアイテムに対して max-width: 100% だと幅が可変になってしまうため width: 100% に変更する */
+      /*max-width: 100%;*/
+      width: 100%;
+    }
+    /* GlobalFooter */
+    body > div > div >footer {
+    }
+    body > div > div > footer > div {
+      padding-top: 4.5rem;
+      padding-bottom: 1rem;
+    }
+    /* Copyright */
+    body > div > div > footer > div > div {
+      font-size: .875rem;
+      text-align: center;
+    }
+    /* Breadcrumb */
+    nav[aria-label="breadcrumb"] {
+    }
+    nav[aria-label="breadcrumb"] > ol {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0 0;
+      margin: 0 0;
+      list-style: none;
+      /* background-color: */
+      font-size: .875rem;
+    }
+    nav[aria-label="breadcrumb"] > ol > li {
+    }
+    nav[aria-label="breadcrumb"] > ol > li+li {
+      padding-left: .5rem;
+    }
+    nav[aria-label="breadcrumb"] > ol > li+li::before {
+      float: left;
+      padding-right: .5rem;
+      color: rgba(33, 37, 41, 0.75);
+      content: "/";
+    }
+    nav[aria-label="breadcrumb"] > ol > li > a[aria-current="page"] {
+      color: rgba(33, 37, 41, 0.75);
+      text-decoration: none;
+    }
+    /* articleBody */
+    div[itemprop="articleBody"] h2 {
+        margin-top: 4.5rem;
+        margin-bottom: 1.5rem;
+    }
+    div[itemprop="articleBody"] h3 {
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+    div[itemprop="articleBody"] h2+h3 {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    div[itemprop="articleBody"] table {
+        margin: 1.5rem 0;
+        border-spacing: 0;
+        border-collapse: separate;
+        border-width: 1px 0 0 1px;
+        border-style: solid;
+        border-color: #cfcfff;
+    }
+    div[itemprop="articleBody"] table > thead > tr {
+        background-image: linear-gradient(#fefefe, #ebebff);
+    }
+    div[itemprop="articleBody"] table > thead > tr > th,
+    div[itemprop="articleBody"] table > thead > tr > td,
+    div[itemprop="articleBody"] table > tbody > tr > th,
+    div[itemprop="articleBody"] table > tbody > tr > td {
+        padding: .25rem;
+        border-width: 0 1px 1px 0;
+        border-style: solid;
+        border-color: #cfcfff;
+    }
+  </style>
+</head>
+<body>
+  <!-- RootContainer -->
+  <div>
+    <!-- FullHeightContainer -->
+    <div itemscope itemtype="http://schema.org/BlogPosting">
+      <!-- GlobalHeader -->
+      <header itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="怠日記">
+        <div>
+          <!-- SiteName -->
+          <div>怠日記</div>
+        </div>
+      </header>
+      <!-- Body -->
+      <main>
+        <div>
+          <article>
+            <header>
+              <span><time datetime="2019-07-22" itemprop="datePublished" content="2019-07-22">2019-07-22</time></span>
+              <span> (更新：<time datetime="2025-07-28" itemprop="dateModified" content="2025-07-28">2025-07-28</time>)</span>
+              <h1 itemprop="headline">WindowsにOracle XEをインストールする</h1>
+              <meta itemprop="mainEntityOfPage" content="">
+              <div itemprop="author" itemscope itemtype="http://schema.org/Person">
+              </div>
+            </header>
+
+            <div itemprop="articleBody">
+<p>自分だけが好き勝手に使える Oracle 環境がほしくなったので、無償で利用できる Oracle XE (Oracle Database Express Edition) をインストールした。</p>
+<p>特にむずかしい点はなかったが、インストールの手順をメモしておく。</p>
+<h2 id="実行環境">実行環境</h2>
+<ul>
+<li>Windows 10 Pro Build 1809 (64bit)</li>
+<li>Oracle Database 11gR2 Express Edition for Windows x64 (Oracle XE)</li>
+</ul>
+<h2 id="インストーラのダウンロード">インストーラのダウンロード</h2>
+<p>前提として、インストーラのダウンロードには Oracle アカウントが必要になる。<br />
+持っていない場合はアカウントを作成しておくこと。<br />
+アカウント登録は無料である。</p>
+<p><br></p>
+<p>Oracle XE のインストーラは、以下の URL からダウンロードできる。<br />
+<a href="https://www.oracle.com/database/technologies/xe-prior-release-downloads.html">Oracle Database XE Prior Release Archive (https://www.oracle.com/database/technologies/xe-prior-release-downloads.html)</a></p>
+<p>今回使ったのは Windows x64 だが、それのほかに Windows (32bit) と Linux x64 のインストーラが提供されている。</p>
+<p>自分の環境に合わせてダウンロードしてほしい。</p>
+<h2 id="oracle-xeのインストール手順">Oracle XEのインストール手順</h2>
+<p>まずはダウンロードしたファイル（OracleXE112_Win64.zip）を解凍する。</p>
+<p>次に解凍されたファイルにある、セットアップファイル（DISK1\setup.exe）を実行する。<br />
+（ダブルクリックで OK）</p>
+<p>インストーラが起動するので、あとはインストール・ウィザードに従う。<br />
+（特に変更する項目はない。デフォルトでよいだろう）</p>
+<ol type="1">
+<li><p>インストールの準備をしています</p>
+<p><img src="./img/2019-07-22_125108.png" width="581" height="352" alt=""></p></li>
+<li><p>InstallShield ウィザードへようこそ</p>
+<p><img src="./img/2019-07-22_125128.png" width="581" height="352" alt=""></p></li>
+<li><p>使用許諾条項</p>
+<p><img src="./img/2019-07-22_125158.png" width="581" height="352" alt=""></p>
+<p>使用許諾条項に同意するを選ぶ。</p></li>
+<li><p>宛先場所を選択</p>
+<p><img src="./img/2019-07-22_125218.png" width="581" height="352" alt=""></p></li>
+<li><p>データベース・パスワードの指定</p>
+<p><img src="./img/2019-07-22_125309.png" width="499" height="309" alt=""></p>
+<p>SYS および SYSTEM ユーザーに設定するパスワードを入力する。<br />
+くれぐれも忘れないように。</p></li>
+<li><p>サマリー</p>
+<p><img src="./img/2019-07-22_125410.png" width="499" height="309" alt=""></p></li>
+<li><p>セットアップステータス</p>
+<p><img src="./img/2019-07-22_125456.png" width="581" height="352" alt=""></p></li>
+<li><p>Install Shield ウィザード完了</p>
+<p><img src="./img/2019-07-22_125730.png" width="581" height="352" alt=""></p></li>
+</ol>
+<!-- 説明に使うキャプチャ -->
+<!-- 2019-07-22_125108.png インストールの準備をしています -->
+<!-- 2019-07-22_125128.png ウィザードへようこそ -->
+<!-- 2019-07-22_125158.png 使用許諾条項：同意する -->
+<!-- 2019-07-22_125218.png 宛先場所を選択 -->
+<!-- 2019-07-22_125309.png データベース・パスワードの指定：SYS および SYSTEM のパスワードを入力。忘れないこと -->
+<!-- 2019-07-22_125410.png サマリー -->
+<!-- 2019-07-22_125456.png セットアップステータス：終わるまで待つ -->
+<!-- 2019-07-22_125730.png インストール完了 -->
+<h2 id="自動起動しないようにしておく">自動起動しないようにしておく</h2>
+<p>インストール後の設定では、Oracle XE は自動起動されるようになっている。<br />
+使用頻度にもよるだろうが、自動起動しないように変更しておくことをおすすめする。</p>
+            </div>
+          </article>
+          <aside></aside>
+        </div>
+      </main>
+      <!-- GlobalFooter -->
+      <footer>
+        <div>
+          <!-- Copyright -->
+          <div>&copy; 2019-2025 怠日記</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
