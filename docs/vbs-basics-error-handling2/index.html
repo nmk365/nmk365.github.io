@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="dcterms.title" content="VBScript - エラー処理（その２）">
+  <meta name="dcterms.date" content="2023-05-02">
+  <meta name="dcterms.modified" content="2025-06-05">
+  <meta name="keywords" content="プログラミング, VBScript, WSH, WindowsScriptHost">
+  <title>VBScript - エラー処理（その２） - 怠日記</title>
+  <meta property="og:title" content="VBScript - エラー処理（その２）">
+  <meta property="og:url" content="/vbs-basics-error-handling2/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="怠日記">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>*{box-sizing:border-box}*::before,*::after{box-sizing:inherit}main{display:block}html{font-size:100%}body{margin:0;line-height:1.5;font-weight:400;font-family:"Helvetica Neue","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:rgba(0,0,0,.9);word-wrap:break-word;overflow-wrap:break-word}body>div>div{display:flex;flex-direction:column;min-height:100vh}body>div>div>header>div,body>div>div>main>div,body>div>div>footer>div{padding-left:.5rem;padding-right:.5rem}body>div>div>header>div>div{font-size:1.5rem;line-height:2;text-align:center}nav[aria-label="breadcrumb"]{font-size:.875rem}div.sourceCode{padding:1em;border:1px solid #d3d3d3}div.sourceCode{margin:1.5rem 0}body>div>div>main{flex:1 0 auto;margin-top:2rem;margin-left:auto;margin-right:auto;width:100%}body>div>div>footer>div{padding-top:4.5rem;padding-bottom:1rem}body>div>div>footer>div>div{font-size:.875rem;text-align:center}nav[aria-label="breadcrumb"]>ol{display:flex;flex-wrap:wrap;padding:0 0;margin:0 0;list-style:none;font-size:.875rem}nav[aria-label="breadcrumb"]>ol>li+li{padding-left:.5rem}nav[aria-label="breadcrumb"]>ol>li+li::before{float:left;padding-right:.5rem;color:rgba(33,37,41,.75);content:"/"}nav[aria-label="breadcrumb"]>ol>li>a[aria-current="page"]{color:rgba(33,37,41,.75);text-decoration:none}div[itemprop="articleBody"] h2{margin-top:4.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h3{margin-top:3rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h2+h3{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] table{margin:1.5rem 0;border-spacing:0;border-collapse:separate;border-width:1px 0 0 1px;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] table>thead>tr{background-image:linear-gradient(#fefefe,#ebebff)}div[itemprop="articleBody"] table>thead>tr>th,div[itemprop="articleBody"] table>thead>tr>td,div[itemprop="articleBody"] table>tbody>tr>th,div[itemprop="articleBody"] table>tbody>tr>td{padding:.25rem;border-width:0 1px 1px 0;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] p,div[itemprop="articleBody"] ol,div[itemprop="articleBody"] ul,div[itemprop="articleBody"] dl{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] img{max-width:100%;height:auto}</style>
+</head>
+<body>
+  <!-- RootContainer -->
+  <div>
+    <!-- FullHeightContainer -->
+    <div itemscope itemtype="http://schema.org/BlogPosting">
+      <!-- GlobalHeader -->
+      <header itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="怠日記">
+        <div>
+          <!-- SiteName -->
+          <div>怠日記</div>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+<ol itemscope="" itemtype="https://schema.org/BreadcrumbList">
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/"><span itemprop="name">トップ</span></a><meta itemprop="position" content="1"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/vbscript-table-of-contents/"><span itemprop="name">VBScript</span></a><meta itemprop="position" content="2"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item active"><a aria-current="page" itemtype="https://schema.org/Thing" itemprop="item" href="#"><span itemprop="name">エラー処理（その２）</span></a><meta itemprop="position" content="3"></li>
+</ol>
+</nav>
+        </div>
+      </header>
+      <!-- Body -->
+      <main>
+        <div>
+          <article>
+            <header>
+              <span><time datetime="2023-05-02T00:00:00+09:00" itemprop="datePublished">2023年5月2日</time></span>
+              <span> (更新：<time datetime="2025-06-05T00:00:00+09:00" itemprop="dateModified">2025年6月5日</time>)</span>
+              <h1 itemprop="headline">VBScript - エラー処理（その２）</h1>
+              <meta itemprop="mainEntityOfPage" content="/vbs-basics-error-handling2/">
+            </header>
+            <div itemprop="articleBody">
+<!--# VBScript - エラー処理（その２）-->
+<!-- Breadcrumb:1:"/":"トップ" -->
+<!-- Breadcrumb:2:"/vbscript-table-of-contents/":"VBScript" -->
+<!-- Breadcrumb:3:"#":"エラー処理（その２）" -->
+<p>スクリプト内で発生したエラーの対処方法を説明する。</p>
+<h2 id="エラー処理">エラー処理</h2>
+<p>スクリプトの実行中にエラーが起きた場合、通常、その時点でスクリプトは強制終了される。</p>
+<p>エラーが起きた場合に強制終了ではなく独自の処理を行うときは、On Error ステートメントと Err オブジェクトを使う。</p>
+<p><br></p>
+<p>独自のエラー処理を行えるようにするには、On Error Resume Next ステートメントを使ってエラー処理を有効にする。</p>
+<p>エラー処理を有効にすると、実行時エラーが起きても強制終了せず、そのまま処理を継続するようになる。</p>
+<p>エラー処理を無効に戻すときは On Error GoTo 0 ステートメントを使う。</p>
+<p><br></p>
+<p>実行時エラーの発生有無は Err オブジェクトの Number プロパティで判定できる。</p>
+<p>Number プロパティは正常なら 0 に、そうでないなら 0 以外になる。</p>
+<p><br></p>
+<p>基本的なエラー処理の流れは次のとおり。</p>
+<ol type="1">
+<li>エラーの発生が想定される処理の前に On Error Resume Next ステートメントを置いて、エラー処理を有効化</li>
+<li>処理を実行</li>
+<li>Err.Number &lt;&gt; 0 だったらエラー処理する</li>
+<li>On Error GoTo 0 ステートメントでエラー処理を無効化</li>
+</ol>
+<p>不適切なエラー処理はスクリプトの暴走につながる。注意すること。</p>
+<p><br></p>
+<p>次のサンプルは、ユーザーに入力された数値で 100 を割り、結果を表示する。<br />
+エラーが起きた場合は、エラー情報を通知して終了する。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> y</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>y = InputBox(<span class="st">&quot;100を割る数を入力してください&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;★エラー処理を有効化</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">On</span> <span class="kw">Error</span> <span class="kw">Resume</span> <span class="kw">Next</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> ret</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>ret = 100 / y</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">If </span>Err.Number &lt;&gt; 0 <span class="kw">Then</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;★エラー処理</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    WScript.Echo <span class="st">&quot;Error # &quot;</span> &amp; CStr(Err.Number) &amp; <span class="st">&quot; : &quot;</span> &amp; Err.Description</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    WScript.Quit 1</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">End If</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;★エラー処理を無効化</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">On</span> <span class="kw">Error</span> <span class="kw">GoTo</span> 0</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;計算結果を表示</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>WScript.Echo <span class="st">&quot;100 ÷ &quot;</span> &amp; y &amp; <span class="st">&quot; = &quot;</span> &amp; ret</span></code></pre></div>
+<p>本来であれば計算の前に入力チェックするべきだが、まぁサンプルということで。</p>
+<h2 id="エラー情報errオブジェクト">エラー情報（Errオブジェクト）</h2>
+<p>実行時エラーの内容は Err オブジェクトに格納される。</p>
+<p>Err オブジェクトは以下のプロパティとメソッドを持つ。</p>
+<h3 id="numberプロパティ">Numberプロパティ</h3>
+<p>エラー番号。正常なら 0 、異常なら 0 以外。</p>
+<h3 id="descriptionプロパティ">Descriptionプロパティ</h3>
+<p>エラーの説明。</p>
+<h3 id="helpfileプロパティ">HelpFileプロパティ</h3>
+<p>ヘルプファイルのパス。</p>
+<h3 id="helpcontextプロパティ">HelpContextプロパティ</h3>
+<p>ヘルプファイルのトピックを表すコンテキスト番号。<br />
+HelpFile プロパティを指定した場合、HelpContext プロパティで指定したトピックが自動的に表示される。</p>
+<h3 id="sourceプロパティ">Sourceプロパティ</h3>
+<p>エラーを最初に発生させたオブジェクトの名前。</p>
+<h3 id="clearメソッド">Clearメソッド</h3>
+<p>Err オブジェクトが持つすべてのプロパティの値をクリアする。</p>
+<h3 id="raiseメソッド">Raiseメソッド</h3>
+<p>実行時エラーを生成する。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Err.Raise number [, source] [, description] [, helpFile] [, helpContext]</span></code></pre></div>
+<ul>
+<li><p><strong>number</strong>：<br />
+エラーの番号を Long 型の数値で指定する。<br />
+0 ～ 65535 の範囲が指定可能。<br />
+0 ～ 512 は VBScript の組み込みエラー、513 ～ はユーザー定義エラーとなる。</p>
+<p>ユーザー定義エラーは定数 vbObjectError 以上の数値にする。<br />
+たとえば、エラー番号 1050 を発生させるには vbObjectError + 1050 とする。</p></li>
+<li><p><strong>source</strong>：<br />
+エラーを生成したオブジェクトまたはアプリケーションの名前を指定する。<br />
+省略可能。</p></li>
+<li><p><strong>description</strong>：<br />
+エラーの説明を指定する。<br />
+省略可能。</p></li>
+<li><p><strong>helpFile</strong>：<br />
+ヘルプファイルのパスを指定する。<br />
+省略可能。</p></li>
+<li><p><strong>helpContext</strong>：<br />
+ヘルプファイル内のトピックを識別するコンテキストIDを指定する。<br />
+省略可能。</p></li>
+</ul>
+<h2 id="エラー処理の適用範囲">エラー処理の適用範囲</h2>
+<p>On Error Resume Next ステートメントは使用したプロシージャにのみ適用される。</p>
+<p>エラー処理が無効なプロシージャで実行時エラーが発生した場合、エラー処理が有効なプロシージャまで処理が渡る。</p>
+<p>もしエラー処理が有効なプロシージャがなければ、そのままエラー情報が表示され、スクリプトは終了される。</p>
+<p><br></p>
+<p>例： エラー処理が有効なプロシージャからエラー処理が無効なプロシージャを呼び出した場合</p>
+<p>FuncA → FuncB で呼び出し、FuncB で実行時エラーが起きた場合、FuncA に処理が渡る。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;エラー処理が有効なプロシージャ FuncA</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">Sub </span>FuncA</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">On</span> <span class="kw">Error</span> <span class="kw">Resume</span> <span class="kw">Next</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">Dim</span> ret</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    ret = FuncB</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;FuncB で実行エラーが起きた場合、ここ（FuncB を呼び出した行の次行）に処理が渡る</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;エラー処理</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">If </span>Err.Number &lt;&gt; 0 <span class="kw">Then</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        WScript.Echo <span class="st">&quot;Error # &quot;</span> &amp; CStr(Err.Number) &amp; <span class="st">&quot; : &quot;</span> &amp; Err.Description</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        WScript.Quit 1</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">End If</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">End Sub</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;エラー処理が無効なプロシージャ FuncB</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">Function </span>FuncB</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;ゼロ除算エラーを起こす</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    FuncB = 100 / 0</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="kw">End Function</span></span></code></pre></div>
+<p><br></p>
+<p>例： 呼び出しの階層が深くなっても考え方は同じ</p>
+<p>FuncA → FuncB → FuncC で呼び出し、FuncC で実行時エラーが起きた場合、FuncA に処理が渡る。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;エラー処理が有効なプロシージャ FuncA</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">Sub </span>FuncA</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">On</span> <span class="kw">Error</span> <span class="kw">Resume</span> <span class="kw">Next</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">Dim</span> ret</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    ret = FuncB</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;FuncB/C で実行エラーが起きた場合、ここ（FuncB を呼び出した行の次行）に処理が渡る</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;エラー処理</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">If </span>Err.Number &lt;&gt; 0 <span class="kw">Then</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        WScript.Echo <span class="st">&quot;Error # &quot;</span> &amp; CStr(Err.Number) &amp; <span class="st">&quot; : &quot;</span> &amp; Err.Description</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        WScript.Quit 1</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">End If</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">End Sub</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;エラー処理が無効なプロシージャ FuncB</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">Function </span>FuncB</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    FuncB = FuncC</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="kw">End Function</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;エラー処理が無効なプロシージャ FuncC</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">Function </span>FuncC</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;ゼロ除算エラーを起こす</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    FuncC = 100 / 0</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="kw">End Function</span></span></code></pre></div>
+<h2 id="エラー処理メモ">エラー処理メモ</h2>
+<h3 id="確実にエラー処理できるようにするには">確実にエラー処理できるようにするには</h3>
+<p>実行時エラーによってスクリプトを強制終了されないようにするには、メインルーチンで On Error Resume Next ステートメントを使うのが確実である。</p>
+<p>そうすることで処理されなかったすべてのエラーを、メインルーチンでキャッチできるようになる。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;メインルーチン</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">On</span> <span class="kw">Error</span> <span class="kw">Resume</span> <span class="kw">Next</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">Call</span> Main</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">If </span>Err.Number = 0 <span class="kw">Then</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;正常終了</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    WScript.Quit 0</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">Else</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;異常終了（処理されなかったすべてのエラーをここでキャッチできる）</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    WScript.Echo <span class="st">&quot;Error # &quot;</span> &amp; CStr(Err.Number) &amp; <span class="st">&quot; : &quot;</span> &amp; Err.Description</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    WScript.Quit 1</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">End If</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">On</span> <span class="kw">Error</span> <span class="kw">GoTo</span> 0</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;サブルーチン</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">Sub </span>Main</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;TODO: 処理を書く</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="kw">End Sub</span></span></code></pre></div>
+<h3 id="サブルーチンのエラーをメインルーチンで処理する">サブルーチンのエラーをメインルーチンで処理する</h3>
+<p>サブルーチンで発生したエラーを、メインルーチンで処理するようにもできる。</p>
+<p>そうする場合、サブルーチンはエラー処理を有効化しておく。<br />
+メインルーチンは無効のままで良い。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;メインルーチン</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>WScript.Echo Divide(100, 0)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">If </span>Err.Number &lt;&gt; 0 <span class="kw">Then</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;★サブルーチンで発生したエラーの処理</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    WScript.Echo <span class="st">&quot;Divide Error # &quot;</span> &amp; CStr(Err.Number) &amp; <span class="st">&quot; : &quot;</span> &amp; Err.Description</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    WScript.Quit 1</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">End If</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;サブルーチン</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">Function </span>Divide(<span class="kw">ByVal</span> a, <span class="kw">ByVal</span> b)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;★エラー処理を有効化</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">On</span> <span class="kw">Error</span> <span class="kw">Resume</span> <span class="kw">Next</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;実行時エラーが起きるかもしれない処理を実行</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    Divide = a / b</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="kw">End Function</span></span></code></pre></div>
+<h3 id="vbscriptではラベルによるエラー処理はできない">VBScriptではラベルによるエラー処理はできない</h3>
+<p>VBScript では VB6 や VBA にあるラベルによるエラー処理は利用できない。</p>
+<p>以下のように On Error GoTo 〈ラベル名〉 と指定して、エラー発生時に指定したラベルへ飛ばす書き方は VBScript では不可能。</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;Notice: VBScript ではサポートされていない書き方</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;エラーが起きたら ErrHandler ラベルに飛ばす</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">On</span> <span class="kw">Error</span> <span class="kw">GoTo</span> ErrHandler</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">Dim</span> ret</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    ret = 100 / 0</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    MsgBox ret</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>ExitHandler:</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">Exit Sub</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ErrHandler:</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    MsgBox <span class="st">&quot;Error # &quot;</span> &amp; CStr(Err.Number) &amp; <span class="st">&quot; : &quot;</span> &amp; Err.Description</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GoTo</span> ExitHandler</span></code></pre></div>
+<h2 id="try-catchのようにエラー処理をする">try-catchのようにエラー処理をする</h2>
+<p>VBScript では C# や Java のような tru-catch での例外処理はサポートされていない。<br />
+が、少し工夫するだけでそれっぽくエラー処理をすることはできる。</p>
+<p>まず VBScript におけるエラー処理で覚えておくべきポイント3つを以下に挙げる。</p>
+<ul>
+<li>エラーを処理するには On Error Resume Next ステートメントでエラー処理を有効化する。</li>
+<li>On Error Resume Next ステートメントによる設定は、そのプロシージャ内でのみ適用される。</li>
+<li>エラー処理を有効にしていないプロシージャで実行時エラーが起きた場合、エラー処理が有効なプロシージャまで処理が戻る。<br />
+エラー処理が有効なプロシージャがなかった場合はスクリプトが終了する。</li>
+</ul>
+<p>これらのポイントをふまえて、try-catch のようなエラー処理にしたのが次のスクリプト。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">&#39;try...catch...finally のサンプル</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">Sub </span>TryCatchExample</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;エラー処理を有効化</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">On</span> <span class="kw">Error</span> <span class="kw">Resume</span> <span class="kw">Next</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">Dim</span> errorHasOccurred</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    errorHasOccurred = <span class="kw">False</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;Try にあたる処理を呼び出す</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">Call</span> <span class="kw">Try</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;Try で実行時エラーが発生した場合の処理を分岐内に書く</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">If </span>Err.Number &lt;&gt; 0 <span class="kw">Then</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        errorHasOccurred = <span class="kw">True</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">&#39;TODO: catch にあたる処理を書く</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">End If</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;TODO: finally にあたる処理を書く</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;実行時エラーが発生していた場合はここで処理終了</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">If </span>errorHasOccurred <span class="kw">Then</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">Exit Sub</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">End If</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="kw">End Sub</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="kw">Sub Try</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;TODO: try にあたる処理を書く</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="kw">End Sub</span></span></code></pre></div>
+<p>TryCatchExample プロシージャは On Error Resume Next ステートメントでエラー処理を有効化している。</p>
+<p>TryCatchExample プロシージャから呼び出される Try プロシージャは、エラー処理は無効なまま。<br />
+なので Try プロシージャで実行時エラーが発生した場合、TryCatchExample プロシージャの Call Try の次の行に制御が渡る。</p>
+<p>そこで Err.Number プロパティを見て、実行時エラーが発生していた場合はエラー処理をする。</p>
+            </div>
+          </article>
+          <aside></aside>
+        </div>
+      </main>
+      <!-- GlobalFooter -->
+      <footer>
+        <div>
+          <!-- Copyright -->
+          <div>&copy; 2019-2025 怠日記</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

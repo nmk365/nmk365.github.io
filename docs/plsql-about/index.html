@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="dcterms.title" content="PL/SQL - 概要">
+  <meta name="dcterms.date" content="2024-02-08">
+  <meta name="keywords" content="プログラミング, Oracle, PL/SQL">
+  <title>PL/SQL - 概要 - 怠日記</title>
+  <meta property="og:title" content="PL/SQL - 概要">
+  <meta property="og:url" content="/plsql-about/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="怠日記">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>*{box-sizing:border-box}*::before,*::after{box-sizing:inherit}main{display:block}html{font-size:100%}body{margin:0;line-height:1.5;font-weight:400;font-family:"Helvetica Neue","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:rgba(0,0,0,.9);word-wrap:break-word;overflow-wrap:break-word}body>div>div{display:flex;flex-direction:column;min-height:100vh}body>div>div>header>div,body>div>div>main>div,body>div>div>footer>div{padding-left:.5rem;padding-right:.5rem}body>div>div>header>div>div{font-size:1.5rem;line-height:2;text-align:center}nav[aria-label="breadcrumb"]{font-size:.875rem}div.sourceCode{padding:1em;border:1px solid #d3d3d3}div.sourceCode{margin:1.5rem 0}body>div>div>main{flex:1 0 auto;margin-top:2rem;margin-left:auto;margin-right:auto;width:100%}body>div>div>footer>div{padding-top:4.5rem;padding-bottom:1rem}body>div>div>footer>div>div{font-size:.875rem;text-align:center}nav[aria-label="breadcrumb"]>ol{display:flex;flex-wrap:wrap;padding:0 0;margin:0 0;list-style:none;font-size:.875rem}nav[aria-label="breadcrumb"]>ol>li+li{padding-left:.5rem}nav[aria-label="breadcrumb"]>ol>li+li::before{float:left;padding-right:.5rem;color:rgba(33,37,41,.75);content:"/"}nav[aria-label="breadcrumb"]>ol>li>a[aria-current="page"]{color:rgba(33,37,41,.75);text-decoration:none}div[itemprop="articleBody"] h2{margin-top:4.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h3{margin-top:3rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h2+h3{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] table{margin:1.5rem 0;border-spacing:0;border-collapse:separate;border-width:1px 0 0 1px;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] table>thead>tr{background-image:linear-gradient(#fefefe,#ebebff)}div[itemprop="articleBody"] table>thead>tr>th,div[itemprop="articleBody"] table>thead>tr>td,div[itemprop="articleBody"] table>tbody>tr>th,div[itemprop="articleBody"] table>tbody>tr>td{padding:.25rem;border-width:0 1px 1px 0;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] p,div[itemprop="articleBody"] ol,div[itemprop="articleBody"] ul,div[itemprop="articleBody"] dl{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] img{max-width:100%;height:auto}</style>
+</head>
+<body>
+  <!-- RootContainer -->
+  <div>
+    <!-- FullHeightContainer -->
+    <div itemscope itemtype="http://schema.org/BlogPosting">
+      <!-- GlobalHeader -->
+      <header itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="怠日記">
+        <div>
+          <!-- SiteName -->
+          <div>怠日記</div>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+<ol itemscope="" itemtype="https://schema.org/BreadcrumbList">
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/"><span itemprop="name">トップ</span></a><meta itemprop="position" content="1"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/plsql-table-of-contents/"><span itemprop="name">PL/SQL</span></a><meta itemprop="position" content="2"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item active"><a aria-current="page" itemtype="https://schema.org/Thing" itemprop="item" href="#"><span itemprop="name">概要</span></a><meta itemprop="position" content="3"></li>
+</ol>
+</nav>
+        </div>
+      </header>
+      <!-- Body -->
+      <main>
+        <div>
+          <article>
+            <header>
+              <span><time datetime="2024-02-08T00:00:00+09:00" itemprop="datePublished">2024年2月8日</time></span>
+              <h1 itemprop="headline">PL/SQL - 概要</h1>
+              <meta itemprop="mainEntityOfPage" content="/plsql-about/">
+            </header>
+            <div itemprop="articleBody">
+<!--# PL/SQL - 概要-->
+<!-- basics-of-plsql -->
+<!-- 作成：2024-02-21 -->
+<!-- 更新：2025-06-25 -->
+<!-- 概要：Oracle PL/SQL プログラミングの基礎的な部分を解説する。 -->
+<h2 id="plsql-とは">PL/SQL とは</h2>
+<p>SQL を手続き型言語として拡張したのが PL/SQL である。<br />
+Oracle データベースで利用できる。</p>
+<p>条件分岐やループなど SQL だけではできない処理を実行できる。</p>
+<h2 id="plsql-プログラムの種類">PL/SQL プログラムの種類</h2>
+<p>プログラムをデータベースに格納しておくかどうかで種類が分かれる。</p>
+<ul>
+<li><p><strong>ストアドプロシージャ、ストアドファンクション、パッケージ</strong>：<br />
+PL/SQL ブロックに名前を付けて、データベースに格納したもの。<br />
+名前を指定して処理を呼び出す。<br />
+格納できる PL/SQL ブロックは、プロシージャ・ファンクション・パッケージなど。</p></li>
+<li><p><strong>無名ブロック</strong>：<br />
+データベースに格納されていない PL/SQL ブロックのこと。<br />
+ファイルなどに保存しておいた PL/SQL ブロックを指定して実行する。</p></li>
+</ul>
+<h2 id="plsql-プログラムの構造">PL/SQL プログラムの構造</h2>
+<p>PL/SQL プログラムはブロックと呼ばれる固まりで構成される。<br />
+ブロックには宣言部、処理部、例外処理部の3つのセクションがある。</p>
+<p>各セクションの説明は以下のとおり。</p>
+<ul>
+<li><p><strong>宣言部</strong>：<br />
+DECLARE で開始する。<br />
+変数や定数、ファンクション、プロシージャなどを宣言する。</p></li>
+<li><p><strong>処理部</strong>：<br />
+BEGIN で開始する。<br />
+そのブロックで行う処理を記載する。</p></li>
+<li><p><strong>例外処理部</strong>：<br />
+EXCEPTION で開始する。<br />
+そのブロックの処理部で起きた例外を処理する。</p></li>
+</ul>
+<p>すべてのセクションを定義したブロックは次のようになる。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>DECLARE</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  宣言部</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>BEGIN</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  処理部</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>EXCEPTION</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  例外処理部</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>END;</span></code></pre></div>
+<p>3つのセクションのうち、処理部だけが必須である。</p>
+<p>次のように BEGIN と END; だけで構成するのが最小の PL/SQL ブロックとなる。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>BEGIN</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  NULL;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>END;</span></code></pre></div>
+<p>処理部に一つも処理がないとエラーになる。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>BEGIN</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>END;</span></code></pre></div>
+<p>↓</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ORA-06550: 行2、列1:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>PLS-00103: 記号&quot;END&quot;が見つかりました。 次のうちの1つが入るとき:</span></code></pre></div>
+<p><br></p>
+<p>ブロックは入れ子にすることもできる。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>BEGIN</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  処理-1</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  BEGIN</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    処理-2</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  EXCEPTION</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    処理-2 の例外処理</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  END;</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  処理-3</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>EXCEPTION</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  全体の例外処理</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>END;</span></code></pre></div>
+            </div>
+          </article>
+          <aside></aside>
+        </div>
+      </main>
+      <!-- GlobalFooter -->
+      <footer>
+        <div>
+          <!-- Copyright -->
+          <div>&copy; 2019-2025 怠日記</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

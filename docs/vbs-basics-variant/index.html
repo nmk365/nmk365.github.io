@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="dcterms.title" content="VBScript - Variant（バリアント）型とは">
+  <meta name="dcterms.date" content="2023-04-09">
+  <meta name="dcterms.modified" content="2025-06-05">
+  <meta name="keywords" content="プログラミング, VBScript, WSH, WindowsScriptHost">
+  <title>VBScript - Variant（バリアント）型とは - 怠日記</title>
+  <meta property="og:title" content="VBScript - Variant（バリアント）型とは">
+  <meta property="og:url" content="/vbs-basics-variant/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="怠日記">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>*{box-sizing:border-box}*::before,*::after{box-sizing:inherit}main{display:block}html{font-size:100%}body{margin:0;line-height:1.5;font-weight:400;font-family:"Helvetica Neue","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:rgba(0,0,0,.9);word-wrap:break-word;overflow-wrap:break-word}body>div>div{display:flex;flex-direction:column;min-height:100vh}body>div>div>header>div,body>div>div>main>div,body>div>div>footer>div{padding-left:.5rem;padding-right:.5rem}body>div>div>header>div>div{font-size:1.5rem;line-height:2;text-align:center}nav[aria-label="breadcrumb"]{font-size:.875rem}div.sourceCode{padding:1em;border:1px solid #d3d3d3}div.sourceCode{margin:1.5rem 0}body>div>div>main{flex:1 0 auto;margin-top:2rem;margin-left:auto;margin-right:auto;width:100%}body>div>div>footer>div{padding-top:4.5rem;padding-bottom:1rem}body>div>div>footer>div>div{font-size:.875rem;text-align:center}nav[aria-label="breadcrumb"]>ol{display:flex;flex-wrap:wrap;padding:0 0;margin:0 0;list-style:none;font-size:.875rem}nav[aria-label="breadcrumb"]>ol>li+li{padding-left:.5rem}nav[aria-label="breadcrumb"]>ol>li+li::before{float:left;padding-right:.5rem;color:rgba(33,37,41,.75);content:"/"}nav[aria-label="breadcrumb"]>ol>li>a[aria-current="page"]{color:rgba(33,37,41,.75);text-decoration:none}div[itemprop="articleBody"] h2{margin-top:4.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h3{margin-top:3rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h2+h3{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] table{margin:1.5rem 0;border-spacing:0;border-collapse:separate;border-width:1px 0 0 1px;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] table>thead>tr{background-image:linear-gradient(#fefefe,#ebebff)}div[itemprop="articleBody"] table>thead>tr>th,div[itemprop="articleBody"] table>thead>tr>td,div[itemprop="articleBody"] table>tbody>tr>th,div[itemprop="articleBody"] table>tbody>tr>td{padding:.25rem;border-width:0 1px 1px 0;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] p,div[itemprop="articleBody"] ol,div[itemprop="articleBody"] ul,div[itemprop="articleBody"] dl{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] img{max-width:100%;height:auto}</style>
+</head>
+<body>
+  <!-- RootContainer -->
+  <div>
+    <!-- FullHeightContainer -->
+    <div itemscope itemtype="http://schema.org/BlogPosting">
+      <!-- GlobalHeader -->
+      <header itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="怠日記">
+        <div>
+          <!-- SiteName -->
+          <div>怠日記</div>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+<ol itemscope="" itemtype="https://schema.org/BreadcrumbList">
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/"><span itemprop="name">トップ</span></a><meta itemprop="position" content="1"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/vbscript-table-of-contents/"><span itemprop="name">VBScript</span></a><meta itemprop="position" content="2"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item active"><a aria-current="page" itemtype="https://schema.org/Thing" itemprop="item" href="#"><span itemprop="name">Variant（バリアント）型とは</span></a><meta itemprop="position" content="3"></li>
+</ol>
+</nav>
+        </div>
+      </header>
+      <!-- Body -->
+      <main>
+        <div>
+          <article>
+            <header>
+              <span><time datetime="2023-04-09T00:00:00+09:00" itemprop="datePublished">2023年4月9日</time></span>
+              <span> (更新：<time datetime="2025-06-05T00:00:00+09:00" itemprop="dateModified">2025年6月5日</time>)</span>
+              <h1 itemprop="headline">VBScript - Variant（バリアント）型とは</h1>
+              <meta itemprop="mainEntityOfPage" content="/vbs-basics-variant/">
+            </header>
+            <div itemprop="articleBody">
+<!--# VBScript - Variant（バリアント）型とは-->
+<!-- Breadcrumb:1:"/":"トップ" -->
+<!-- Breadcrumb:2:"/vbscript-table-of-contents/":"VBScript" -->
+<!-- Breadcrumb:3:"#":"Variant（バリアント）型とは" -->
+<p>VBScript のデータ型には Variant（バリアント）型しかない。<br />
+変数のデータ型も Variant になる。</p>
+<p>Variant には文字列だろうが数値だろうが何でも自由に格納できる。</p>
+<h2 id="variantバリアント型の特徴">Variant（バリアント）型の特徴</h2>
+<p>Variant は次の特徴を持つ。</p>
+<ul>
+<li>どんな値でも格納できる。数値でも文字列でも何でも OK 。</li>
+<li>格納された値をどのデータ型として扱うかを「内部処理形式」として持つ。<br />
+たとえば、整数が格納されたら内部処理形式は整数型となり、ブール型（True/False）ならブール型となる。</li>
+</ul>
+<h2 id="variantの内部処理形式一覧">Variantの内部処理形式一覧</h2>
+<p>Variant で持てる内部処理形式は以下のとおり。</p>
+<!--
+| 内部処理形式                   | 説明                                                                                                                            |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Empty 値                       | 初期値が代入されていないことを表す。                                                                                            |
+| Null 値                        | 有効なデータを持たないことを表す。                                                                                              |
+| ブール型（Boolean）            | 真（True）または偽 (False) の真偽値                                                                                             |
+| バイト型（Byte）               | 0 ～ 255 の整数                                                                                                                 |
+| 整数型（Integer）              | -32,768 ～ 32,767 の整数                                                                                                        |
+| 長整数型（Long）               | -2,147,483,648 ～ 2,147,483,647 の整数                                                                                          |
+| 単精度浮動小数点数型（Single） | -3.402823E38 ～ -1.401298E-45 (負の値) および 1.401298E-45 ～   3.402823E38 (正の値) の実数                                     |
+| 倍精度浮動小数点数型（Double） | -1.79769313486232E308 ～ -4.94065645841247E-324 (負の値) および   4.94065645841247E-324 ～ 1.79769313486232E308 (正の値) の実数 |
+| 通貨型（Currency）             | -922,337,203,685,477.5808 ～ 922,337,203,685,477.5807 の数値                                                                    |
+| 日付（時刻）型（Date）         | 西暦100年1月1日～西暦9999年12月31日の日付（を表す数字）                                                                         |
+| 文字列型（String）             | 約2GBまでの文字を格納できる可変長文字列                                                                                         |
+| オブジェクト型                 | オブジェクトへの参照                                                                                                            |
+| エラー型                       | エラー番号を持つデータ型                                                                                                        |
+-->
+<ul>
+<li><strong>Empty 値</strong> : 初期値が代入されていないことを表す</li>
+<li><strong>Null 値</strong> : 有効なデータを持たないことを表す</li>
+<li><strong>ブール型（Boolean）</strong> : 真（True）または偽 (False) の真偽値</li>
+<li><strong>バイト型（Byte）</strong> : 0 ～ 255 の整数</li>
+<li><strong>整数型（Integer）</strong> : -32,768 ～ 32,767 の整数</li>
+<li><strong>長整数型（Long）</strong> : -2,147,483,648 ～ 2,147,483,647 の整数</li>
+<li><strong>単精度浮動小数点数型（Single）</strong> : -3.402823E38 ～ -1.401298E-45 (負の値) および 1.401298E-45 ～ 3.402823E38 (正の値) の実数</li>
+<li><strong>倍精度浮動小数点数型（Double）</strong> : -1.79769313486232E308 ～ -4.94065645841247E-324 (負の値) および 4.94065645841247E-324 ～ 1.79769313486232E308 (正の値) の実数</li>
+<li><strong>通貨型（Currency）</strong> : -922,337,203,685,477.5808 ～ 922,337,203,685,477.5807 の数値</li>
+<li><strong>日付（時刻）型（Date）</strong> : 西暦100年1月1日～西暦9999年12月31日の日付を表す数字</li>
+<li><strong>文字列型（String）</strong> : 可変長文字列（約2GBまでの文字を格納できる）</li>
+<li><strong>オブジェクト型</strong> : オブジェクトへの参照</li>
+<li><strong>エラー型</strong> : エラー番号を持つデータ型</li>
+</ul>
+<h2 id="計算結果が元のデータ型を超えると自動で拡張される">計算結果が元のデータ型を超えると自動で拡張される</h2>
+<p>Byte、Integer、Long、Single を格納している Variant を使って計算を行い、結果が元のデータ型の範囲を超えた場合、結果は Variant 内で次に大きいデータ型に昇格される。</p>
+<ul>
+<li>Byte → Integer</li>
+<li>Integer → Long</li>
+<li>Long または Single → Double</li>
+<li>Currency、Double → 実行時エラー</li>
+</ul>
+<h3 id="byte-integer-に昇格される例">Byte → Integer に昇格される例</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> a, b, c</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>a = CByte(128)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>b = CByte(128)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>c = a + b</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>WScript.Echo TypeName(c)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; → Integer</span></span></code></pre></div>
+<h3 id="integer-long-に昇格される例">Integer → Long に昇格される例</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> d, e, f</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>d = 32767   <span class="co">&#39;Integerの最大値</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>e = 1</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>f = d + e</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>WScript.Echo TypeName(f)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; → Long</span></span></code></pre></div>
+<h3 id="long-double-に昇格される例">Long → Double に昇格される例</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> g, h, i</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>g = 2147483647  <span class="co">&#39;Longの最大値</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>h = 1</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>i = g + h</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>WScript.Echo TypeName(i)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; → Double</span></span></code></pre></div>
+<h3 id="single-double-に昇格される例">Single → Double に昇格される例</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> j, k, l</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>j = CSng(340282350000000000000000000000000000000) <span class="co">&#39;Singleの最大値 3.4028235E+38</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>k = CSng(1)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>l = j + k</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>WScript.Echo TypeName(l)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; → Double</span></span></code></pre></div>
+<h3 id="double-の計算でオーバーフローするとエラー">Double の計算でオーバーフローするとエラー</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> m, n, o</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>m = 1.79769313486231E+308</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n = 0.00000000000001E+308</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>o = m + n</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>WScript.Echo TypeName(o)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; → 実行時エラー #6 - オーバーフローしました。</span></span></code></pre></div>
+<h3 id="currency-の計算でオーバーフローするとエラー">Currency の計算でオーバーフローするとエラー</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode vb"><code class="sourceCode monobasic"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Dim</span> p, q, r</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p = CCur(922337203685477)   <span class="co">&#39;Currencyの最大値 922,337,203,685,477.5807</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>q = 1</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>r = p + q</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>WScript.Echo TypeName(r)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">&#39; → 実行時エラー #6 - オーバーフローしました。</span></span></code></pre></div>
+            </div>
+          </article>
+          <aside></aside>
+        </div>
+      </main>
+      <!-- GlobalFooter -->
+      <footer>
+        <div>
+          <!-- Copyright -->
+          <div>&copy; 2019-2025 怠日記</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

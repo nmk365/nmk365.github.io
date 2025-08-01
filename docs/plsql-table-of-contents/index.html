@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="dcterms.title" content="Oracle PL/SQL プログラミング再入門">
+  <meta name="dcterms.date" content="2024-02-03">
+  <meta name="keywords" content="プログラミング, Oracle, PL/SQL">
+  <title>Oracle PL/SQL プログラミング再入門 - 怠日記</title>
+  <meta property="og:title" content="Oracle PL/SQL プログラミング再入門">
+  <meta property="og:url" content="/plsql-table-of-contents/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="怠日記">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>*{box-sizing:border-box}*::before,*::after{box-sizing:inherit}main{display:block}html{font-size:100%}body{margin:0;line-height:1.5;font-weight:400;font-family:"Helvetica Neue","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:rgba(0,0,0,.9);word-wrap:break-word;overflow-wrap:break-word}body>div>div{display:flex;flex-direction:column;min-height:100vh}body>div>div>header>div,body>div>div>main>div,body>div>div>footer>div{padding-left:.5rem;padding-right:.5rem}body>div>div>header>div>div{font-size:1.5rem;line-height:2;text-align:center}nav[aria-label="breadcrumb"]{font-size:.875rem}div.sourceCode{padding:1em;border:1px solid #d3d3d3}div.sourceCode{margin:1.5rem 0}body>div>div>main{flex:1 0 auto;margin-top:2rem;margin-left:auto;margin-right:auto;width:100%}body>div>div>footer>div{padding-top:4.5rem;padding-bottom:1rem}body>div>div>footer>div>div{font-size:.875rem;text-align:center}nav[aria-label="breadcrumb"]>ol{display:flex;flex-wrap:wrap;padding:0 0;margin:0 0;list-style:none;font-size:.875rem}nav[aria-label="breadcrumb"]>ol>li+li{padding-left:.5rem}nav[aria-label="breadcrumb"]>ol>li+li::before{float:left;padding-right:.5rem;color:rgba(33,37,41,.75);content:"/"}nav[aria-label="breadcrumb"]>ol>li>a[aria-current="page"]{color:rgba(33,37,41,.75);text-decoration:none}div[itemprop="articleBody"] h2{margin-top:4.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h3{margin-top:3rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h2+h3{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] table{margin:1.5rem 0;border-spacing:0;border-collapse:separate;border-width:1px 0 0 1px;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] table>thead>tr{background-image:linear-gradient(#fefefe,#ebebff)}div[itemprop="articleBody"] table>thead>tr>th,div[itemprop="articleBody"] table>thead>tr>td,div[itemprop="articleBody"] table>tbody>tr>th,div[itemprop="articleBody"] table>tbody>tr>td{padding:.25rem;border-width:0 1px 1px 0;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] p,div[itemprop="articleBody"] ol,div[itemprop="articleBody"] ul,div[itemprop="articleBody"] dl{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] img{max-width:100%;height:auto}</style>
+</head>
+<body>
+  <!-- RootContainer -->
+  <div>
+    <!-- FullHeightContainer -->
+    <div itemscope itemtype="http://schema.org/BlogPosting">
+      <!-- GlobalHeader -->
+      <header itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="怠日記">
+        <div>
+          <!-- SiteName -->
+          <div>怠日記</div>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+<ol itemscope="" itemtype="https://schema.org/BreadcrumbList">
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/"><span itemprop="name">トップ</span></a><meta itemprop="position" content="1"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item active"><a aria-current="page" itemtype="https://schema.org/Thing" itemprop="item" href="/plsql-table-of-contents/"><span itemprop="name">PL/SQL</span></a><meta itemprop="position" content="2"></li>
+</ol>
+</nav>
+        </div>
+      </header>
+      <!-- Body -->
+      <main>
+        <div>
+          <article>
+            <header>
+              <span><time datetime="2024-02-03T00:00:00+09:00" itemprop="datePublished">2024年2月3日</time></span>
+              <h1 itemprop="headline">Oracle PL/SQL プログラミング再入門</h1>
+              <meta itemprop="mainEntityOfPage" content="/plsql-table-of-contents/">
+            </header>
+            <div itemprop="articleBody">
+<!--# Oracle PL/SQL プログラミング再入門-->
+<!-- basics-of-plsql -->
+<!-- 作成：2024-02-21 -->
+<!-- 更新：2025-06-25 -->
+<!-- 概要：Oracle PL/SQL プログラミングの基礎的な部分を解説する。 -->
+<p>PL/SQL とは SQL を手続き型言語として拡張したものである。<br />
+Oracle データベースで利用でき、条件分岐やループなど SQL だけでは実現できない処理を実行できる。</p>
+<h2 id="目次">目次</h2>
+<ul>
+<li><a href="/plsql-about/">PL/SQL とは</a></li>
+<li><a href="/plsql-how-to-run/">SQL*Plus による PL/SQL ブロックの実行方法</a></li>
+<li><a href="/plsql-variable/">変数の宣言</a></li>
+<li><a href="/plsql-constant/">定数の宣言</a></li>
+<li><a href="/plsql-type-rowtype-attr/">%TYPE属性、%ROWTYPE属性によるデータ型の指定</a></li>
+<li><a href="/plsql-select-into/">検索結果を変数に格納する | SELECT INTO文</a></li>
+<li><a href="/plsql-error-handling/">例外処理</a></li>
+<li><a href="/plsql-control-flow-if/">条件分岐 | IF文、CASE文</a></li>
+<li><a href="/plsql-control-flow-loop/">繰り返し処理 | LOOP文</a></li>
+<li><a href="/plsql-control-flow-sequential-control-statements/">順次制御文 | GOTO文、NULL文</a></li>
+</ul>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://docs.oracle.com/cd/F19136_01/lnpls/preface.html#GUID-9952D28D-0310-4869-8002-4462BDC679BB">データベースPL/SQL言語リファレンス</a></li>
+</ul>
+            </div>
+          </article>
+          <aside></aside>
+        </div>
+      </main>
+      <!-- GlobalFooter -->
+      <footer>
+        <div>
+          <!-- Copyright -->
+          <div>&copy; 2019-2025 怠日記</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

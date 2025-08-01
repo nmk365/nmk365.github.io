@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="dcterms.title" content="PL/SQL - 繰り返し処理 | LOOP文">
+  <meta name="dcterms.date" content="2024-03-19">
+  <meta name="keywords" content="プログラミング, Oracle, PL/SQL">
+  <title>PL/SQL - 繰り返し処理 | LOOP文 - 怠日記</title>
+  <meta property="og:title" content="PL/SQL - 繰り返し処理 | LOOP文">
+  <meta property="og:url" content="/plsql-control-flow-loop/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="怠日記">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>*{box-sizing:border-box}*::before,*::after{box-sizing:inherit}main{display:block}html{font-size:100%}body{margin:0;line-height:1.5;font-weight:400;font-family:"Helvetica Neue","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:rgba(0,0,0,.9);word-wrap:break-word;overflow-wrap:break-word}body>div>div{display:flex;flex-direction:column;min-height:100vh}body>div>div>header>div,body>div>div>main>div,body>div>div>footer>div{padding-left:.5rem;padding-right:.5rem}body>div>div>header>div>div{font-size:1.5rem;line-height:2;text-align:center}nav[aria-label="breadcrumb"]{font-size:.875rem}div.sourceCode{padding:1em;border:1px solid #d3d3d3}div.sourceCode{margin:1.5rem 0}body>div>div>main{flex:1 0 auto;margin-top:2rem;margin-left:auto;margin-right:auto;width:100%}body>div>div>footer>div{padding-top:4.5rem;padding-bottom:1rem}body>div>div>footer>div>div{font-size:.875rem;text-align:center}nav[aria-label="breadcrumb"]>ol{display:flex;flex-wrap:wrap;padding:0 0;margin:0 0;list-style:none;font-size:.875rem}nav[aria-label="breadcrumb"]>ol>li+li{padding-left:.5rem}nav[aria-label="breadcrumb"]>ol>li+li::before{float:left;padding-right:.5rem;color:rgba(33,37,41,.75);content:"/"}nav[aria-label="breadcrumb"]>ol>li>a[aria-current="page"]{color:rgba(33,37,41,.75);text-decoration:none}div[itemprop="articleBody"] h2{margin-top:4.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h3{margin-top:3rem;margin-bottom:1.5rem}div[itemprop="articleBody"] h2+h3{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] table{margin:1.5rem 0;border-spacing:0;border-collapse:separate;border-width:1px 0 0 1px;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] table>thead>tr{background-image:linear-gradient(#fefefe,#ebebff)}div[itemprop="articleBody"] table>thead>tr>th,div[itemprop="articleBody"] table>thead>tr>td,div[itemprop="articleBody"] table>tbody>tr>th,div[itemprop="articleBody"] table>tbody>tr>td{padding:.25rem;border-width:0 1px 1px 0;border-style:solid;border-color:#cfcfff}div[itemprop="articleBody"] p,div[itemprop="articleBody"] ol,div[itemprop="articleBody"] ul,div[itemprop="articleBody"] dl{margin-top:1.5rem;margin-bottom:1.5rem}div[itemprop="articleBody"] img{max-width:100%;height:auto}</style>
+</head>
+<body>
+  <!-- RootContainer -->
+  <div>
+    <!-- FullHeightContainer -->
+    <div itemscope itemtype="http://schema.org/BlogPosting">
+      <!-- GlobalHeader -->
+      <header itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="怠日記">
+        <div>
+          <!-- SiteName -->
+          <div>怠日記</div>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+<ol itemscope="" itemtype="https://schema.org/BreadcrumbList">
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/"><span itemprop="name">トップ</span></a><meta itemprop="position" content="1"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/plsql-table-of-contents/"><span itemprop="name">PL/SQL</span></a><meta itemprop="position" content="2"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item active"><a aria-current="page" itemtype="https://schema.org/Thing" itemprop="item" href="#"><span itemprop="name">繰り返し処理 | LOOP文</span></a><meta itemprop="position" content="3"></li>
+</ol>
+</nav>
+        </div>
+      </header>
+      <!-- Body -->
+      <main>
+        <div>
+          <article>
+            <header>
+              <span><time datetime="2024-03-19T00:00:00+09:00" itemprop="datePublished">2024年3月19日</time></span>
+              <h1 itemprop="headline">PL/SQL - 繰り返し処理 | LOOP文</h1>
+              <meta itemprop="mainEntityOfPage" content="/plsql-control-flow-loop/">
+            </header>
+            <div itemprop="articleBody">
+<!--# PL/SQL - 繰り返し処理 | LOOP文-->
+<!-- basics-of-plsql -->
+<!-- 作成：2024-02-21 -->
+<!-- 更新：2025-06-25 -->
+<!-- 概要：Oracle PL/SQL プログラミングの基礎的な部分を解説する。 -->
+<h2 id="loop文">Loop文</h2>
+<p>Loop 文の構文は次のとおり。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>LOOP</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<p>statements を繰り返し実行する。</p>
+<p>このままでは無限ループとなるため、ループを抜ける条件の指定が必要である。</p>
+<h2 id="exit文">EXIT文</h2>
+<p>EXIT 文は現在のループを抜ける。</p>
+<p>次のサンプルは、condition を満たした場合にループを抜けるプログラムである。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>LOOP</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  IF condition THEN</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    EXIT;   -- ここでループを抜ける</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  END IF;</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>END LOOP;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            -- すると制御がここに渡る</span></code></pre></div>
+<h2 id="exit-when文">EXIT WHEN文</h2>
+<p>EXIT WHEN 文は指定の条件を満たす場合に現在のループを抜ける。</p>
+<p>次のサンプルは、condition を満たした場合にループを抜けるプログラムである。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>LOOP</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  EXIT WHEN condition;  -- 条件を満たしたらループを抜ける</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>END LOOP;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>            -- ← すると制御がここに渡る</span></code></pre></div>
+<h2 id="ラベル付きループを抜ける">ラベル付きループを抜ける</h2>
+<p>ループにラベルを付けておくと外側のループを抜けることもできる。</p>
+<p>consition_1 を満たす場合は現在のループを抜ける。<br />
+condition_2 を満たす場合は外側のループを抜ける。</p>
+<!--<p style="text-indent: -1em; padding-left: 1em;">＊&lt; と &gt; がタグとして認識されてしまう不具合のため全角文字にしてある。<br>コピペして使うときは半角に戻していただきたい。</p>-->
+<div class="sourceCode" id="cb4"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>＜＜outer_loop＞＞</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>LOOP</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  ＜＜inner_loop＞＞</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  LOOP</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    statements</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    EXIT WHEN inner_loop WHEN consition_1;</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    EXIT WHEN outer_loop WHEN condition_2;</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  END LOOP inner_loop;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>END LOOP outer_loop;</span></code></pre></div>
+<h2 id="continue文">CONTINUE文</h2>
+<p>CONTINUE 文は現在のループを終了し、次のループを始める。</p>
+<p>次のサンプルは、condition を満たした場合に次のループを始めるプログラムである。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LOOP</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                -- すると制御がここに渡る</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  IF condition THEN</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    CONTINUE;   -- ここで現在のループを終了</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  END IF;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<h2 id="continue-when文">CONTINUE WHEN文</h2>
+<p>CONTINUE WHEN 文は指定の条件を満たす場合に現在のループを終了し、次のループを始める。</p>
+<p>次のサンプルは、condition を満たした場合に次のループを始めるプログラムである。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>LOOP</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                            -- すると制御がここに渡る</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  CONTINUE WHEN condition;  -- 条件を満たしたら現在のループを終了</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<h2 id="for-loop文">FOR LOOP文</h2>
+<p>構文は以下のとおり。</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>FOR index IN lower_bound..upper_bound LOOP</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<p>index は lower_bound から始まる。<br />
+index が upper_bound に達するまで繰り返される。<br />
+（index ＞ upper_bound でループを抜ける）<br />
+index は 1 ずつ増加する。</p>
+<p>次のサンプルは、index を 1 から始め、6 になるとループを抜けるプログラムである。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>FOR i IN 1..5 LOOP</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  DBMS_OUTPUT.PUT_LINE(i);</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<h2 id="反転for-loop文">反転FOR LOOP文</h2>
+<p>REVERSE 指定すると index を減らしていくことができる。</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>FOR index IN REVERSE lower_bound..upper_bound LOOP</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<p>REVERSE 指定した場合、index は upper_bound から始まる。<br />
+index が lower_bound に達するまで繰り返される。<br />
+（index ＜ lower_bound でループを抜ける）<br />
+index は 1 ずつ減少する。</p>
+<p>次のサンプルは、index を 5 から始め、0 になるとループを抜けるプログラムである。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>FOR i IN REVERSE 1..5 LOOP</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  DBMS_OUTPUT.PUT_LINE(i);</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<h2 id="while-loop文">WHILE LOOP文</h2>
+<p>WHILE LOOP 文は条件を満たす間、処理を繰り返す。</p>
+<p>構文は以下のとおり。</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>WHILE condition LOOP</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  statements</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>END LOOP;</span></code></pre></div>
+<p>condition を満たす間、statements を繰り返し実行する。</p>
+            </div>
+          </article>
+          <aside></aside>
+        </div>
+      </main>
+      <!-- GlobalFooter -->
+      <footer>
+        <div>
+          <!-- Copyright -->
+          <div>&copy; 2019-2025 怠日記</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
