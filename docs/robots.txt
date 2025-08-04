@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: https://nmk365.github.io/sitemap.txt

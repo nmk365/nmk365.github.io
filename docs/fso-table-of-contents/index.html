@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="dcterms.title" content="トップページ">
-  <meta name="dcterms.date" content="1900-01-01">
+  <meta name="dcterms.title" content="FSO(FileSystemObject) 機能別リファレンス">
+  <meta name="dcterms.date" content="2023-09-30">
   <meta name="dcterms.modified" content="2025-08-04">
-  <title>トップページ - 怠日記</title>
-  <meta property="og:title" content="トップページ">
-  <meta property="og:url" content="/top/">
+  <meta name="keywords" content="プログラミング, VBScript, WSH, WindowsScriptHost">
+  <title>FSO(FileSystemObject) 機能別リファレンス - 怠日記</title>
+  <meta property="og:title" content="FSO(FileSystemObject) 機能別リファレンス">
+  <meta property="og:url" content="/fso-table-of-contents/">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="怠日記">
   <style>
@@ -50,20 +51,30 @@
         <div>
           <article>
             <header>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+<ol itemscope="" itemtype="https://schema.org/BreadcrumbList">
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item"><a itemtype="https://schema.org/Thing" itemprop="item" href="/"><span itemprop="name">トップ</span></a><meta itemprop="position" content="1"></li>
+<li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="breadcrumb-item active"><a aria-current="page" itemtype="https://schema.org/Thing" itemprop="item" href="/fso-table-of-contents/"><span itemprop="name">FSO</span></a><meta itemprop="position" content="2"></li>
+</ol>
+</nav>
               <div>
-                <span><time datetime="2019-07-22T00:00:00+09:00" itemprop="datePublished">2019年7月22日</time></span>
+                <span><time datetime="2023-09-30T00:00:00+09:00" itemprop="datePublished">2023年9月30日</time></span>
                 <span> (更新：<time datetime="2025-08-04T00:00:00+09:00" itemprop="dateModified">2025年8月4日</time>)</span>
               </div>
-              <h1 itemprop="headline">トップページ</h1>
-              <meta itemprop="mainEntityOfPage" content="/top/">
+              <h1 itemprop="headline">FSO(FileSystemObject) 機能別リファレンス</h1>
+              <meta itemprop="mainEntityOfPage" content="/fso-table-of-contents/">
             </header>
             <div itemprop="articleBody">
-<h2 id="fsofilesystemobject-機能別リファレンス">FSO(FileSystemObject) 機能別リファレンス</h2>
-<h3 id="概要">概要</h3>
+<!--# FSO(FileSystemObject) 機能別リファレンス-->
+<!-- Breadcrumb:1:"/":"トップ" -->
+<!-- Breadcrumb:2:"/vbscript-table-of-contents/":"VBScript" -->
+<!-- Breadcrumb:3:"#":"パスの生成・取得" -->
+<h2 id="概要">概要</h2>
 <ul>
 <li><a href="/fso-about/">FSO（FileSystemObject）とは</a></li>
 </ul>
-<h3 id="パス操作">パス操作</h3>
+<h2 id="パス操作">パス操作</h2>
 <ul>
 <li><a href="/fso-buildpath/">パスを生成する | BuildPathメソッド</a></li>
 <li><a href="/fso-getabsolutepathname/">完全なパスを取得する | GetAbsolutePathNameメソッド</a></li>
@@ -74,7 +85,7 @@
 <li><a href="/fso-getparentfoldername/">親フォルダの名前を取得する | GetParentFolderNameメソッド</a></li>
 <li><a href="/fso-getdrivename/">パスからドライブ名を取得する | GetDriveNameメソッド</a></li>
 </ul>
-<h3 id="ファイル操作">ファイル操作</h3>
+<h2 id="ファイル操作">ファイル操作</h2>
 <ul>
 <li><a href="/fso-fileexists/">ファイルの存在を確認する | FileExistsメソッド</a></li>
 <li><a href="/fso-getfile/">ファイルオブジェクトを取得する | GetFileメソッド</a></li>
@@ -84,7 +95,7 @@
 <li><a href="/fso-createtextfile/">テキストファイルを作る | CreateTextFileメソッド</a></li>
 <li><a href="/fso-opentextfile/">テキストファイルを開く | OpenTextFileメソッド</a></li>
 </ul>
-<h3 id="フォルダ操作">フォルダ操作</h3>
+<h2 id="フォルダ操作">フォルダ操作</h2>
 <ul>
 <li><a href="/fso-folderexists/">フォルダの存在を確認する | FolderExistsメソッド</a></li>
 <li><a href="/fso-getfolder/">フォルダオブジェクトを取得する | GetFolderメソッド</a></li>
@@ -94,29 +105,11 @@
 <li><a href="/fso-deletefolder/">フォルダを削除する | DeleteFolderメソッド</a></li>
 <li><a href="/fso-createfolder/">フォルダを作る | CreateFolderメソッド</a></li>
 </ul>
-<h3 id="ドライブ操作">ドライブ操作</h3>
+<h2 id="ドライブ操作">ドライブ操作</h2>
 <ul>
 <li><a href="/fso-driveexists/">ドライブの存在を確認する | DriveExistsメソッド</a></li>
 <li><a href="/fso-getdrive/">ドライブオブジェクトを取得する | GetDriveメソッド</a></li>
 <li><a href="/fso-drives/">使用できるドライブオブジェクトのコレクションを取得する | Drivesプロパティ</a></li>
-</ul>
-<h2 id="oracle-plsql-再入門">Oracle PL/SQL 再入門</h2>
-<h3 id="基本">基本</h3>
-<ul>
-<li><a href="/plsql-about/">PL/SQL とは</a></li>
-<li><a href="/plsql-how-to-run/">SQL*Plus による PL/SQL ブロックの実行方法</a></li>
-<li><a href="/plsql-variable/">変数の宣言</a></li>
-<li><a href="/plsql-constant/">定数の宣言</a></li>
-<li><a href="/plsql-type-rowtype-attr/">%TYPE属性、%ROWTYPE属性によるデータ型の指定</a></li>
-<li><a href="/plsql-select-into/">検索結果を変数に格納する | SELECT INTO文</a></li>
-<li><a href="/plsql-error-handling/">例外処理</a></li>
-<li><a href="/plsql-control-flow-if/">条件分岐 | IF文、CASE文</a></li>
-<li><a href="/plsql-control-flow-loop/">繰り返し処理 | LOOP文</a></li>
-<li><a href="/plsql-control-flow-sequential-control-statements/">順次制御文 | GOTO文、NULL文</a></li>
-</ul>
-<h3 id="参考">参考</h3>
-<ul>
-<li><a href="https://docs.oracle.com/cd/F19136_01/lnpls/preface.html#GUID-9952D28D-0310-4869-8002-4462BDC679BB">データベースPL/SQL言語リファレンス</a></li>
 </ul>
             </div>
           </article>
